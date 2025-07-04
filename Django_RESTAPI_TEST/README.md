@@ -28,4 +28,13 @@ pip install djangorestframework
 
 pip install django-cors-headers
 ```
- 
+
+##Create React App
+```
+npm create vite@latest my-react-app -- --template react-ts
+
+  cd my-react-app
+  npm install
+  npm run dev
+
+  npm i axios
