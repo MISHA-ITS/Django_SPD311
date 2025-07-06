@@ -1,0 +1,75 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Створення категорії</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 py-10">
+    <div class="max-w-xl mx-auto bg-white p-8 rounded shadow">
+        <h1 class="text-2xl font-bold mb-6">Створення нової категорії</h1>
+
+        {% if success %}
+            <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+                ✅ Категорію успішно створено!
+            </div>
+        {% endif %}
+
+        {% if not form.is_valid %}
+            {% if form.errors %}
+                <div class="mb-4 p-3 bg-red-100 text-red-800 rounded">
+                    ⚠️ Перевірте правильність заповнення форми.
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="id_name" class="block mb-1 font-semibold">Назва</label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <div class="text-red-500 text-sm">{{ form.name.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_slug" class="block mb-1 font-semibold">Slug</label>
+                {{ form.slug }}
+                {% if form.slug.errors %}
+                    <div class="text-red-500 text-sm">{{ form.slug.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_description" class="block mb-1 font-semibold">Опис</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="text-red-500 text-sm">{{ form.description.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_image" class="block mb-1 font-semibold">Фото</label>
+                {{ form.image }}
+                {% if form.image.errors %}
+                    <div class="text-red-500 text-sm">{{ form.image.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div>
+                <label class="inline-flex items-center">
+                    {{ form.is_active }}
+                    <span class="ml-2">Активна</span>
+                </label>
+                {% if form.is_active.errors %}
+                    <div class="text-red-500 text-sm">{{ form.is_active.errors.0 }}</div>
+                {% endif %}
+            </div>
+        
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Зберегти
+            </button>
+        </form>
+                
+    </div>
+</body>
+</html>
