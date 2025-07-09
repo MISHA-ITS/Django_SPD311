@@ -10,7 +10,7 @@ function App() {
     const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
-        fetch('http://localhost:4097/api/categories')
+        fetch('http://localhost:4893/api/categories')
             .then(res => res.json())
             .then(data => {
                 console.log("GET DATA SERVER", data);
@@ -25,11 +25,8 @@ function App() {
 
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                     {categories.map((cat) => (
-                        <div
-                            key={cat.id}
-                            className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 text-center border border-gray-200"
-                        >
-                            <div className="text-xl font-semibold text-gray-800">{cat.name}</div>
+                        <div key={cat.id}>
+                            <div className="category-button">{cat.name}</div>
                         </div>
                     ))}
                 </div>
@@ -39,8 +36,6 @@ function App() {
                 )}
             </div>
         </div>
-
-
     );
 }
 
