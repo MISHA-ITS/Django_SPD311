@@ -55,6 +55,7 @@ class CategoryCreateView(View):
 class GoogleLoginView(APIView):
     def post(self, request):
         access_token = request.data.get('access_token')
+        print(access_token)
         if not access_token:
             return Response({'error': 'access_token is required'}, status=status.HTTP_400_BAD_REQUEST)
         
