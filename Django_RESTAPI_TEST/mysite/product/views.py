@@ -2,8 +2,11 @@ from django.views import View
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Category
+from .models import Product
 from .forms import CategoryForm
 from .serializers import CategorySerializer
+from .serializers import CategoryWithProductsSerializer
+from .serializers import ProductSerializer
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from rest_framework.views import APIView
@@ -12,7 +15,6 @@ from rest_framework import status
 import requests
 from rest_framework import generics
 from .serializers import UserCreateSerializer
-import requests
 from django.core.files.base import ContentFile
 from urllib.parse import urlparse
 import os
@@ -25,7 +27,11 @@ GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 class CategoryPageView(TemplateView):
     template_name = 'product/categories.html'
@@ -34,7 +40,6 @@ class CategoryPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         return context
-
 
 class CategoryCreateView(View):
     def get(self, request):
@@ -51,6 +56,24 @@ class CategoryCreateView(View):
                 'form': form,
                 'success': False
             })
+
+class ProductViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+class CategoryWithProductsView(generics.ListAPIView):
+    queryset = Category.objects.prefetch_related('products__images').all()
+    serializer_class = CategoryWithProductsSerializer
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 class GoogleLoginView(APIView):
     def post(self, request):
